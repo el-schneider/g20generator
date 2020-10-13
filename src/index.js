@@ -112,9 +112,12 @@ let composer;
 let stats;
 
 /* Init renderer and canvas */
-const leftCanvas = document.getElementById("g20-left");
 const container = document.body;
-const renderer = new WebGLRenderer({ canvas: leftCanvas });
+const renderer = new WebGLRenderer();
+container.style.overflow = "hidden";
+container.style.margin = 0;
+container.appendChild(renderer.domElement);
+renderer.setClearColor(0x3d3b33);
 
 renderer.setClearColor(0x000000, 1);
 
@@ -279,22 +282,6 @@ function render() {
 
     if (DEVELOPMENT) {
         stats.end();
-    }
-}
-
-function checkIfIsHomepage() {
-    //remove the trailing slash
-    let currentUrl = window.location.href.replace(/\/+$/, "");
-
-    if (
-        currentUrl === window.location.origin ||
-        currentUrl === window.location.origin + "/de"
-    ) {
-        // console.log("is_home")
-
-        if (window.EventBus != undefined) {
-            window.EventBus.dispatchEvent("to-home");
-        }
     }
 }
 
