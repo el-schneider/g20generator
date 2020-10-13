@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "canvas-sketch": "^0.7.4",
+    "guigui": "^2.0.3",
+    "postprocessing": "^6.17.4",
+    "stats.js": "^0.17.0",
     "three": "^0.121.1"
   }
 }
