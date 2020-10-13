@@ -47,7 +47,6 @@ const settings = {
 
 const SETTINGS = {
     useComposer: true,
-    maxResolutionLongSide: 1280,
 };
 const DEVELOPMENT = false;
 let renderer;
@@ -62,6 +61,7 @@ let container;
 
 const sketch = ({ context }) => {
     /* Custom settings */
+    window.addEventListener("mousemove", onMousemove);
 
     /* Init renderer and canvas */
     container = document.body;
@@ -73,6 +73,7 @@ const sketch = ({ context }) => {
     container.appendChild(renderer.domElement);
 
     // WebGL background color
+
     renderer.setClearColor("#000", 1);
 
     // Setup a camera
@@ -102,13 +103,11 @@ const sketch = ({ context }) => {
     controls.start();
     // controls.target.set(-5, 0, 0);
 
+    initPostProcessing();
+
     /* Lights */
     lights = new BasicLights();
     let head, crab, spiral;
-
-    /* Various event listeners */
-    window.addEventListener("resize", onResize);
-    window.addEventListener("mousemove", onMousemove);
 
     /* Preloader */
     preloader.init(
@@ -118,12 +117,6 @@ const sketch = ({ context }) => {
     );
     preloader
         .load([
-            // {
-            //     id: "searchImage",
-            //     type: "image",
-            //     url: SMAAEffect.searchImageDataURL,
-            // },
-            // { id: "areaImage", type: "image", url: SMAAEffect.areaImageDataURL },
             {
                 id: "head",
                 type: "gltf",
@@ -146,10 +139,6 @@ const sketch = ({ context }) => {
             },
         ])
         .then(() => {
-            initPostProcessing();
-            onResize();
-            animate();
-
             /* Actual content of the scene */
 
             head = new Head();
@@ -157,13 +146,13 @@ const sketch = ({ context }) => {
             spiral = new Spiral();
             scene.add(head, lights);
         });
+
     // // Create a renderer
     // const renderer = new THREE.WebGLRenderer({
     //     canvas: context.canvas,
     // });
 
     // // WebGL background color
-    // renderer.setClearColor("#000", 1);
 
     // // Setup a camera
     // const camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100);
@@ -201,7 +190,13 @@ const sketch = ({ context }) => {
         // Update & render your scene here
         render({ time }) {
             controls.update();
-            renderer.render(scene, camera);
+
+            if (SETTINGS.useComposer) {
+                composer.render();
+            } else {
+                renderer.clear();
+                renderer.render(scene, camera);
+            }
         },
         // Dispose of events & renderer for cleaner hot-reloading
         unload() {
@@ -242,16 +237,6 @@ function initPostProcessing() {
     composer.addPass(renderPass);
     composer.addPass(effectPass);
     effectPass.renderToScreen = true;
-}
-
-/**
-  Resize canvas
-*/
-function onResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    composer.setSize(window.innerWidth, window.innerHeight);
 }
 
 /**
