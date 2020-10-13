@@ -1,8 +1,28 @@
 // Ensure ThreeJS is in global scope for the 'examples/'
 global.THREE = require("three");
 
+import "three";
+
+import {
+    EffectComposer,
+    BloomEffect,
+    // SMAAEffect,
+    RenderPass,
+    EffectPass,
+} from "postprocessing";
+
+import Spiral from "./objects/Spiral";
+import Crab from "./objects/Crab";
+import Head from "./objects/Head";
+import OrbitControls from "./controls/OrbitControls";
+import { preloader } from "./loader";
+import { TextureResolver } from "./loader/resolvers/TextureResolver";
+import { ImageResolver } from "./loader/resolvers/ImageResolver";
+import { GLTFResolver } from "./loader/resolvers/GLTFResolver";
+
 // Include any additional ThreeJS examples below
 require("three/examples/js/controls/OrbitControls");
+require("three/examples/js/loaders/GLTFLoader");
 
 const canvasSketch = require("canvas-sketch");
 
