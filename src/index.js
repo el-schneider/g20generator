@@ -26,6 +26,8 @@ import { preloader } from "./loader";
 import { TextureResolver } from "./loader/resolvers/TextureResolver";
 import { ImageResolver } from "./loader/resolvers/ImageResolver";
 import { GLTFResolver } from "./loader/resolvers/GLTFResolver";
+import { sample } from "lodash";
+import BasicLights from "./objects/Lights.js";
 
 // Include any additional ThreeJS examples below
 require("three/examples/js/controls/OrbitControls");
@@ -38,42 +40,156 @@ const settings = {
     animate: true,
     // Get a WebGL canvas rather than 2D
     context: "webgl",
+    dimensions: "a4",
+    pixelsPerInch: 300,
+    units: "cm",
 };
 
+const SETTINGS = {
+    useComposer: true,
+    maxResolutionLongSide: 1280,
+};
+const DEVELOPMENT = false;
+let renderer;
+let isVisible = false;
+let composer;
+let stats;
+let camera;
+let scene;
+let controls;
+let lights;
+let container;
+
 const sketch = ({ context }) => {
-    // Create a renderer
-    const renderer = new THREE.WebGLRenderer({
+    /* Custom settings */
+
+    /* Init renderer and canvas */
+    container = document.body;
+    renderer = new THREE.WebGLRenderer({
         canvas: context.canvas,
     });
+    container.style.overflow = "hidden";
+    container.style.margin = 0;
+    container.appendChild(renderer.domElement);
 
     // WebGL background color
     renderer.setClearColor("#000", 1);
 
     // Setup a camera
-    const camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100);
+
+    /* Main scene and camera */
+    scene = new Scene();
+    // camera = new PerspectiveCamera(
+    //     15,
+    //     window.innerWidth / window.innerHeight,
+    //     0.1,
+    //     1000
+    // );
+
+    camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100);
     camera.position.set(0, 0, -4);
     camera.lookAt(new THREE.Vector3());
 
-    // Setup camera controller
-    const controls = new THREE.OrbitControls(camera, context.canvas);
+    // camera.position.set(-3, 0, 0);
+    // camera.lookAt(new Vector3(-1, 0, 0));
 
-    // Setup your scene
-    const scene = new THREE.Scene();
+    controls = new OrbitControls(camera);
+    camera.position.z = 10;
+    // camera.position.x = -5;
+    // camera.lookAt(new Vector3(-5, 0, 0));
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.5;
+    controls.start();
+    // controls.target.set(-5, 0, 0);
 
-    // Setup a geometry
-    const geometry = new THREE.SphereGeometry(1, 32, 16);
+    /* Lights */
+    lights = new BasicLights();
+    let head, crab, spiral;
 
-    // Setup a material
-    const material = new THREE.MeshBasicMaterial({
-        color: "red",
-        wireframe: true,
-    });
+    /* Various event listeners */
+    window.addEventListener("resize", onResize);
+    window.addEventListener("mousemove", onMousemove);
 
-    // Setup a mesh with geometry + material
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+    /* Preloader */
+    preloader.init(
+        new ImageResolver(),
+        new GLTFResolver(),
+        new TextureResolver()
+    );
+    preloader
+        .load([
+            // {
+            //     id: "searchImage",
+            //     type: "image",
+            //     url: SMAAEffect.searchImageDataURL,
+            // },
+            // { id: "areaImage", type: "image", url: SMAAEffect.areaImageDataURL },
+            {
+                id: "head",
+                type: "gltf",
+                url: "src/assets/models/head.gltf",
+            },
+            {
+                id: "crab",
+                type: "gltf",
+                url: "src/assets/models/mr-crabs.gltf",
+            },
+            {
+                id: "spiral",
+                type: "gltf",
+                url: "src/assets/models/spiral.gltf",
+            },
+            {
+                id: "env",
+                type: "texture",
+                url: "src/assets/textures/g20-experimente_texture_3.jpg",
+            },
+        ])
+        .then(() => {
+            initPostProcessing();
+            onResize();
+            animate();
 
-    // draw each frame
+            /* Actual content of the scene */
+
+            head = new Head();
+            crab = new Crab();
+            spiral = new Spiral();
+            scene.add(head, lights);
+        });
+    // // Create a renderer
+    // const renderer = new THREE.WebGLRenderer({
+    //     canvas: context.canvas,
+    // });
+
+    // // WebGL background color
+    // renderer.setClearColor("#000", 1);
+
+    // // Setup a camera
+    // const camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100);
+    // camera.position.set(0, 0, -4);
+    // camera.lookAt(new THREE.Vector3());
+
+    // // Setup camera controller
+    // const controls = new THREE.OrbitControls(camera, context.canvas);
+
+    // // Setup your scene
+    // const scene = new THREE.Scene();
+
+    // // Setup a geometry
+    // const geometry = new THREE.SphereGeometry(1, 32, 16);
+
+    // // Setup a material
+    // const material = new THREE.MeshBasicMaterial({
+    //     color: "red",
+    //     wireframe: true,
+    // });
+
+    // // Setup a mesh with geometry + material
+    // const mesh = new THREE.Mesh(geometry, material);
+    // scene.add(mesh);
+
+    // // draw each frame
     return {
         // Handle resize events here
         resize({ pixelRatio, viewportWidth, viewportHeight }) {
@@ -98,102 +214,6 @@ const sketch = ({ context }) => {
 canvasSketch(sketch, settings);
 
 // import "./style.css";
-import BasicLights from "./objects/Lights.js";
-
-/* Custom settings */
-const SETTINGS = {
-    useComposer: true,
-    maxResolutionLongSide: 1280,
-};
-const DEVELOPMENT = false;
-
-let isVisible = false;
-let composer;
-let stats;
-
-/* Init renderer and canvas */
-const container = document.body;
-const renderer = new WebGLRenderer();
-container.style.overflow = "hidden";
-container.style.margin = 0;
-container.appendChild(renderer.domElement);
-renderer.setClearColor(0x3d3b33);
-
-renderer.setClearColor(0x000000, 1);
-
-/* Main scene and camera */
-const scene = new Scene();
-let camera = new PerspectiveCamera(
-    15,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-);
-
-// camera.position.set(-3, 0, 0);
-// camera.lookAt(new Vector3(-1, 0, 0));
-
-const controls = new OrbitControls(camera);
-camera.position.z = 10;
-// camera.position.x = -5;
-// camera.lookAt(new Vector3(-5, 0, 0));
-controls.enableDamping = true;
-controls.dampingFactor = 0.5;
-controls.start();
-// controls.target.set(-5, 0, 0);
-
-/* Lights */
-const lights = new BasicLights();
-let head, crab, spiral;
-
-/* Various event listeners */
-window.addEventListener("resize", onResize);
-window.addEventListener("mousemove", onMousemove);
-window.addEventListener("deviceorientation", onOrientation, true);
-
-/* Preloader */
-preloader.init(new ImageResolver(), new GLTFResolver(), new TextureResolver());
-preloader
-    .load([
-        // {
-        //     id: "searchImage",
-        //     type: "image",
-        //     url: SMAAEffect.searchImageDataURL,
-        // },
-        // { id: "areaImage", type: "image", url: SMAAEffect.areaImageDataURL },
-        {
-            id: "head",
-            type: "gltf",
-            url: "assets/models/head.gltf",
-        },
-        {
-            id: "crab",
-            type: "gltf",
-            url: "assets/models/mr-crabs.gltf",
-        },
-        {
-            id: "spiral",
-            type: "gltf",
-            url: "assets/models/spiral.gltf",
-        },
-        {
-            id: "env",
-            type: "texture",
-            url: "assets/textures/g20-experimente_texture_3.jpg",
-        },
-    ])
-    .then(() => {
-        initPostProcessing();
-        onResize();
-        animate();
-
-        /* Actual content of the scene */
-
-        head = new Head();
-        crab = new Crab();
-        spiral = new Spiral();
-        scene.add(_.sample([head]), lights);
-    });
 
 /* some stuff with gui */
 if (DEVELOPMENT) {
@@ -259,7 +279,7 @@ function updateScene() {
 */
 function animate() {
     window.requestAnimationFrame(animate);
-    updateScene();
+    // updateScene();
     render();
 }
 
