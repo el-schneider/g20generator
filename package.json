@@ -16,5 +16,8 @@
         "postprocessing": "^6.17.4",
         "stats.js": "^0.17.0",
         "three": "^0.121.1"
+    },
+    "devDependencies": {
+        "aliasify": "^2.1.0"
     }
 }

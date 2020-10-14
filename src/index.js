@@ -61,6 +61,9 @@ let container;
 let customObjects = [];
 let customObjectsCounter = 0;
 
+const basePath = process.env.NODE_ENV === "production" ? "bla" : ""
+console.log(basePath)
+
 const sketch = ({ context }) => {
     /* Custom settings */
     window.addEventListener("mousemove", onMousemove);
@@ -123,7 +126,7 @@ const sketch = ({ context }) => {
             {
                 id: "head",
                 type: "gltf",
-                url: "src/assets/models/head.gltf",
+                url: "src/assets/models/head.gltf"
             },
             {
                 id: "crab",
