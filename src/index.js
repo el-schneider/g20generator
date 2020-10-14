@@ -145,6 +145,7 @@ const sketch = ({ context }) => {
             crab = new Crab();
             spiral = new Spiral();
             scene.add(head, lights);
+            console.log(scene);
         });
 
     // // Create a renderer
