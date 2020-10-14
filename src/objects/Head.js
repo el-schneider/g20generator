@@ -28,6 +28,7 @@ export default class Torus extends Object3D {
 
         head.scene.children[0].material = mat;
         head.scene.name = "Head";
+        head.scene.isCustomObject = true;
 
         this.add(head.scene);
     }

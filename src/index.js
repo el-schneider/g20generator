@@ -40,7 +40,7 @@ const settings = {
     animate: true,
     // Get a WebGL canvas rather than 2D
     context: "webgl",
-    dimensions: "a4",
+    dimensions: "a5",
     pixelsPerInch: 300,
     units: "cm",
 };
@@ -58,10 +58,13 @@ let scene;
 let controls;
 let lights;
 let container;
+let customObjects = [];
+let customObjectsCounter = 0;
 
 const sketch = ({ context }) => {
     /* Custom settings */
     window.addEventListener("mousemove", onMousemove);
+    window.addEventListener("dblclick", cycleObject);
 
     /* Init renderer and canvas */
     container = document.body;
@@ -141,45 +144,19 @@ const sketch = ({ context }) => {
         .then(() => {
             /* Actual content of the scene */
 
-            head = new Head();
-            crab = new Crab();
-            spiral = new Spiral();
-            scene.add(head, lights);
-            console.log(scene);
+            customObjects.push(new Head());
+            customObjects.push(new Crab());
+            customObjects.push(new Spiral());
+
+            customObjectsCounter = Math.floor(
+                Math.random() * customObjects.length
+            );
+
+            scene.add(customObjects[customObjectsCounter], lights);
+            console.log(customObjectsCounter);
         });
 
-    // // Create a renderer
-    // const renderer = new THREE.WebGLRenderer({
-    //     canvas: context.canvas,
-    // });
-
-    // // WebGL background color
-
-    // // Setup a camera
-    // const camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100);
-    // camera.position.set(0, 0, -4);
-    // camera.lookAt(new THREE.Vector3());
-
-    // // Setup camera controller
-    // const controls = new THREE.OrbitControls(camera, context.canvas);
-
-    // // Setup your scene
-    // const scene = new THREE.Scene();
-
-    // // Setup a geometry
-    // const geometry = new THREE.SphereGeometry(1, 32, 16);
-
-    // // Setup a material
-    // const material = new THREE.MeshBasicMaterial({
-    //     color: "red",
-    //     wireframe: true,
-    // });
-
-    // // Setup a mesh with geometry + material
-    // const mesh = new THREE.Mesh(geometry, material);
-    // scene.add(mesh);
-
-    // // draw each frame
+    // draw each frame
     return {
         // Handle resize events here
         resize({ pixelRatio, viewportWidth, viewportHeight }) {
@@ -207,9 +184,20 @@ const sketch = ({ context }) => {
     };
 };
 
-canvasSketch(sketch, settings);
+function cycleObject() {
+    scene.children
+        .filter((el) => el.children[0].isCustomObject)
+        .forEach((el) => {
+            scene.remove(el);
+        });
+    customObjectsCounter++;
 
-// import "./style.css";
+    if (customObjectsCounter >= customObjects.length) customObjectsCounter = 0;
+
+    scene.add(customObjects[customObjectsCounter]);
+}
+
+canvasSketch(sketch, settings);
 
 /* some stuff with gui */
 if (DEVELOPMENT) {
@@ -258,15 +246,6 @@ function onMousemove(e) {
 function updateScene() {
     //
     scene.rotation.y += 0.005;
-}
-
-/**
-  RAF
-*/
-function animate() {
-    window.requestAnimationFrame(animate);
-    // updateScene();
-    render();
 }
 
 /**

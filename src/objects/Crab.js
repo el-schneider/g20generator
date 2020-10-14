@@ -37,6 +37,7 @@ export default class Torus extends Object3D {
 
         crab.scene.children[0].material = mat;
         crab.scene.name = "Crab";
+        crab.scene.isCustomObject = true;
 
         this.add(crab.scene);
     }

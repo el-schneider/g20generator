@@ -29,6 +29,7 @@ export default class Torus extends Object3D {
 
         spiral.scene.children[0].material = mat;
         spiral.scene.name = "Spiral";
+        spiral.scene.isCustomObject = true;
 
         this.add(spiral.scene);
     }
