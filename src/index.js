@@ -40,7 +40,7 @@ const settings = {
     animate: true,
     // Get a WebGL canvas rather than 2D
     context: "webgl",
-    dimensions: "a6",
+    dimensions: "a5",
     pixelsPerInch: 300,
     units: "cm",
 };
