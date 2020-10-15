@@ -72023,8 +72023,6 @@ let lights;
 let container;
 let customObjects = [];
 let customObjectsCounter = 0;
-const basePath = "production" === "production" ? "bla" : "";
-console.log(basePath);
 
 const sketch = ({
   context
@@ -72078,19 +72076,19 @@ const sketch = ({
   _loader.preloader.load([{
     id: "head",
     type: "gltf",
-    url: "src/assets/models/head.gltf"
+    url: "/g20generator/src/assets/models/head.gltf"
   }, {
     id: "crab",
     type: "gltf",
-    url: "src/assets/models/mr-crabs.gltf"
+    url: "/g20generator/src/assets/models/mr-crabs.gltf"
   }, {
     id: "spiral",
     type: "gltf",
-    url: "src/assets/models/spiral.gltf"
+    url: "/g20generator/src/assets/models/spiral.gltf"
   }, {
     id: "env",
     type: "texture",
-    url: "src/assets/textures/g20-experimente_texture_3.jpg"
+    url: "/g20generator/src/assets/textures/g20-experimente_texture_3.jpg"
   }]).then(() => {
     /* Actual content of the scene */
     customObjects.push(new _Head.default());
