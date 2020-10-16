@@ -153,7 +153,7 @@ const sketch = ({ context }) => {
             );
 
             scene.add(customObjects[customObjectsCounter], lights);
-            console.log(customObjectsCounter);
+            setSceneRandomPos()
         });
 
     // draw each frame
@@ -249,6 +249,17 @@ function updateScene() {
 }
 
 /**
+  UPDATE
+*/
+function setSceneRandomPos() {
+    //
+    // scene.rotation.x = Math.random * Math.PI * 2;
+    scene.rotation.y = Math.random;
+    // scene.rotation.z = Math.random * Math.PI * 2;
+}
+
+
+/**
   Render loop
 */
 function render() {
@@ -271,6 +282,5 @@ function render() {
 }
 
 function degrees_to_radians(degrees) {
-    var pi = Math.PI;
-    return degrees * (pi / 180);
+    return degrees * (Math.PI / 180);
 }
