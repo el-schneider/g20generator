@@ -2,8 +2,7 @@
 this is a **canvas-sketch**-based generator for the GENERATE MMXX Festival 
 
 ## Develop
-use `canvas-sketch src/index.js` for development 
-
+use `bash develop.sh` for development and using the ./outputs folder
 
 ## Build
 use `bash build.sh` to change urls for github pages 

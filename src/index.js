@@ -153,7 +153,7 @@ const sketch = ({ context }) => {
             );
 
             scene.add(customObjects[customObjectsCounter], lights);
-            setSceneRandomPos()
+            setSceneRandomRotation()
         });
 
     // draw each frame
@@ -251,10 +251,10 @@ function updateScene() {
 /**
   UPDATE
 */
-function setSceneRandomPos() {
+function setSceneRandomRotation() {
     //
     // scene.rotation.x = Math.random * Math.PI * 2;
-    scene.rotation.y = Math.random;
+    scene.rotation.y = Math.random() * Math.PI * 2;
     // scene.rotation.z = Math.random * Math.PI * 2;
 }
 
