@@ -43,6 +43,7 @@ const settings = {
     dimensions: "a5",
     pixelsPerInch: 300,
     units: "cm",
+    prefix: "GEXX",
 };
 
 const SETTINGS = {
