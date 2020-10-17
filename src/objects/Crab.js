@@ -24,7 +24,7 @@ export default class Torus extends Object3D {
 
         let mat = new LineDashedMaterial({
             color: 0xff0000,
-            // linewidth: 0.01,
+            linewidth: 100,
             // scale: 0.11,
             // dashSize: 3,
             // gapSize: 3,

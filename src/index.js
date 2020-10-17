@@ -60,12 +60,24 @@ let lights;
 let container;
 let customObjects = [];
 let customObjectsCounter = 0;
+let effectActive = true;
 
 function toggleBackground() {
     let currentColor = renderer.getClearColor().getHexString();
 
-    if (currentColor === "000000") renderer.setClearColor("#FFF", 1);
-    if (currentColor === "ffffff") renderer.setClearColor("#000", 1);
+    if (currentColor === "000000") {
+        renderer.setClearColor("#FFF", 1);
+        initPostProcessing(false);
+    }
+    if (currentColor === "ffffff") {
+        renderer.setClearColor("#000", 1);
+        initPostProcessing(true);
+    }
+}
+
+function toggleEffect() {
+    effectActive = !effectActive;
+    initPostProcessing(effectActive);
 }
 
 const sketch = ({ context }) => {
@@ -75,6 +87,10 @@ const sketch = ({ context }) => {
     window.addEventListener("keyup", (event) => {
         if (event.key === "b") {
             toggleBackground();
+        }
+
+        if (event.key === "e") {
+            toggleEffect();
         }
     });
 
@@ -118,11 +134,11 @@ const sketch = ({ context }) => {
     controls.start();
     // controls.target.set(-5, 0, 0);
 
-    initPostProcessing();
-
     /* Lights */
     lights = new BasicLights();
     let head, crab, spiral;
+
+    initPostProcessing(true);
 
     /* Preloader */
     preloader.init(
@@ -164,7 +180,14 @@ const sketch = ({ context }) => {
                 Math.random() * customObjects.length
             );
 
-            scene.add(customObjects[customObjectsCounter], lights);
+            scene.add(lights);
+
+            const newObject = customObjects[customObjectsCounter];
+            scene.add(newObject);
+            initPostProcessing(
+                newObject.children[0].name === "Crab" ? false : true
+            );
+
             setSceneRandomRotation();
         });
 
@@ -206,7 +229,9 @@ function cycleObject() {
 
     if (customObjectsCounter >= customObjects.length) customObjectsCounter = 0;
 
-    scene.add(customObjects[customObjectsCounter]);
+    const newObject = customObjects[customObjectsCounter];
+    scene.add(newObject);
+    initPostProcessing(newObject.children[0].name === "Crab" ? false : true);
 }
 
 canvasSketch(sketch, settings);
@@ -226,14 +251,19 @@ if (DEVELOPMENT) {
 }
 
 /* -------------------------------------------------------------------------------- */
-function initPostProcessing() {
+function initPostProcessing(bloomEffectActive = false) {
     composer = new EffectComposer(renderer);
     const bloomEffect = new BloomEffect();
     bloomEffect.intensity = 3;
 
     // const smaaEffect = new SMAAEffect(preloader.get('searchImage'), preloader.get('areaImage'))
     // const effectPass = new EffectPass(camera, smaaEffect, bloomEffect)
-    const effectPass = new EffectPass(camera, bloomEffect);
+
+    let effectPass = new EffectPass(camera);
+
+    if (bloomEffectActive) {
+        effectPass = new EffectPass(camera, bloomEffect);
+    }
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
     composer.addPass(effectPass);
