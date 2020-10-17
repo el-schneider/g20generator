@@ -61,10 +61,22 @@ let container;
 let customObjects = [];
 let customObjectsCounter = 0;
 
+function toggleBackground() {
+    let currentColor = renderer.getClearColor().getHexString();
+
+    if (currentColor === "000000") renderer.setClearColor("#FFF", 1);
+    if (currentColor === "ffffff") renderer.setClearColor("#000", 1);
+}
+
 const sketch = ({ context }) => {
     /* Custom settings */
     window.addEventListener("mousemove", onMousemove);
     window.addEventListener("dblclick", cycleObject);
+    window.addEventListener("keyup", (event) => {
+        if (event.key === "b") {
+            toggleBackground();
+        }
+    });
 
     /* Init renderer and canvas */
     container = document.body;
@@ -153,7 +165,7 @@ const sketch = ({ context }) => {
             );
 
             scene.add(customObjects[customObjectsCounter], lights);
-            setSceneRandomRotation()
+            setSceneRandomRotation();
         });
 
     // draw each frame
@@ -257,7 +269,6 @@ function setSceneRandomRotation() {
     scene.rotation.y = Math.random() * Math.PI * 2;
     // scene.rotation.z = Math.random * Math.PI * 2;
 }
-
 
 /**
   Render loop
