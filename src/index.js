@@ -162,7 +162,7 @@ const sketch = ({ context }) => {
             {
                 id: "spiral",
                 type: "gltf",
-                url: "src/assets/models/spiral.gltf",
+                url: "src/assets/models/flowers.gltf",
             },
             {
                 id: "env",

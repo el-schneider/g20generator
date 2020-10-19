@@ -10,10 +10,10 @@ export default class Torus extends Object3D {
     constructor() {
         super();
 
-        this.scale.setScalar(0.015);
+        // this.scale.setScalar(0.015);
         // this.position.y = -2.5;
-        this.position.z = 5;
-        this.rotation.x = Math.PI * -0.5;
+        // this.position.z = 5;
+        // this.rotation.x = Math.PI * -0.5;
 
         const spiral = preloader.get("spiral");
         const envMap = preloader.get("env");
