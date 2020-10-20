@@ -21,7 +21,7 @@ import {
 import Spiral from "./objects/Spiral";
 import Crab from "./objects/Crab";
 import Head from "./objects/Head";
-import Machine from "./objects/Machine";
+import Rock from "./objects/Rock";
 import OrbitControls from "./controls/OrbitControls";
 import { preloader } from "./loader";
 import { TextureResolver } from "./loader/resolvers/TextureResolver";
@@ -161,14 +161,14 @@ const sketch = ({ context }) => {
                 url: "src/assets/models/mr-crabs.gltf",
             },
             {
-                id: "machine",
+                id: "rock",
                 type: "gltf",
-                url: "src/assets/models/random-machine.gltf",
+                url: "src/assets/models/rock2.gltf",
             },
             {
                 id: "spiral",
                 type: "gltf",
-                url: "src/assets/models/rock2.gltf",
+                url: "src/assets/models/spiral.gltf",
             },
             {
                 id: "env",
@@ -179,9 +179,10 @@ const sketch = ({ context }) => {
         .then(() => {
             /* Actual content of the scene */
 
-            // customObjects.push(new Head());
+            customObjects.push(new Head());
             // customObjects.push(new Crab());
             customObjects.push(new Spiral());
+            customObjects.push(new Rock());
             // customObjects.push(new Machine());
 
             customObjectsCounter = Math.floor(

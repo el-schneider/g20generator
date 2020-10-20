@@ -10,11 +10,12 @@ export default class Torus extends Object3D {
     constructor() {
         super();
 
-        this.scale.setScalar(1.25);
-        this.position.y = -2;
-        this.rotation.y = Math.PI * -0.5;
+        this.scale.setScalar(2.0);
+        // this.position.y = -2.5;
+        // this.position.z = 5;
+        // this.rotation.x = Math.PI * -0.5;
 
-        const head = preloader.get("head");
+        const rock = preloader.get("rock");
         const envMap = preloader.get("env");
         // envMap.mapping = EquirectangularReflectionMapping
         envMap.mapping = EquirectangularReflectionMapping;
@@ -26,10 +27,10 @@ export default class Torus extends Object3D {
         mat.envMap = preloader.get("env");
         mat.envMapIntensity = 1;
 
-        head.scene.children[0].material = mat;
-        head.scene.name = "Head";
-        head.scene.isCustomObject = true;
+        rock.scene.children[0].material = mat;
+        rock.scene.name = "Rock";
+        rock.scene.isCustomObject = true;
 
-        this.add(head.scene);
+        this.add(rock.scene);
     }
 }
