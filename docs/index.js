@@ -71973,6 +71973,8 @@ var _Crab = _interopRequireDefault(require("./objects/Crab"));
 
 var _Head = _interopRequireDefault(require("./objects/Head"));
 
+var _Rock = _interopRequireDefault(require("./objects/Rock"));
+
 var _OrbitControls = _interopRequireDefault(require("./controls/OrbitControls"));
 
 var _loader = require("./loader");
@@ -72112,18 +72114,24 @@ const sketch = ({
     type: "gltf",
     url: "g20generator/src/assets/models/mr-crabs.gltf"
   }, {
+    id: "rock",
+    type: "gltf",
+    url: "g20generator/src/assets/models/rock2.gltf"
+  }, {
     id: "spiral",
     type: "gltf",
     url: "g20generator/src/assets/models/spiral.gltf"
   }, {
     id: "env",
     type: "texture",
-    url: "g20generator/src/assets/textures/g20-experimente_texture_3.jpg"
+    url: "g20generator/src/assets/textures/g20-experimente_texture_4_2.jpg"
   }]).then(() => {
     /* Actual content of the scene */
-    customObjects.push(new _Head.default());
-    customObjects.push(new _Crab.default());
+    customObjects.push(new _Head.default()); // customObjects.push(new Crab());
+
     customObjects.push(new _Spiral.default());
+    customObjects.push(new _Rock.default()); // customObjects.push(new Machine());
+
     customObjectsCounter = Math.floor(Math.random() * customObjects.length);
     scene.add(lights);
     const newObject = customObjects[customObjectsCounter];
@@ -72279,7 +72287,7 @@ function degrees_to_radians(degrees) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./controls/OrbitControls":21,"./loader":23,"./loader/resolvers/GLTFResolver":24,"./loader/resolvers/ImageResolver":25,"./loader/resolvers/TextureResolver":26,"./objects/Crab":27,"./objects/Head":28,"./objects/Lights.js":29,"./objects/Spiral":30,"canvas-sketch":1,"guigui":6,"lodash":11,"postprocessing":12,"stats.js":15,"three":16,"three/examples/js/controls/OrbitControls":17,"three/examples/js/loaders/GLTFLoader":18}],23:[function(require,module,exports){
+},{"./controls/OrbitControls":21,"./loader":23,"./loader/resolvers/GLTFResolver":24,"./loader/resolvers/ImageResolver":25,"./loader/resolvers/TextureResolver":26,"./objects/Crab":27,"./objects/Head":28,"./objects/Lights.js":29,"./objects/Rock":30,"./objects/Spiral":31,"canvas-sketch":1,"guigui":6,"lodash":11,"postprocessing":12,"stats.js":15,"three":16,"three/examples/js/controls/OrbitControls":17,"three/examples/js/loaders/GLTFLoader":18}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -72597,8 +72605,8 @@ var _loader = require("../loader");
 
 class Torus extends _three.Object3D {
   constructor() {
-    super(); // this.scale.setScalar(0.125);
-
+    super();
+    this.scale.setScalar(1.25);
     this.position.y = -2;
     this.rotation.y = Math.PI * -0.5;
 
@@ -72671,10 +72679,52 @@ var _loader = require("../loader");
 class Torus extends _three.Object3D {
   constructor() {
     super();
-    this.scale.setScalar(0.015); // this.position.y = -2.5;
+    this.scale.setScalar(2.0); // this.position.y = -2.5;
+    // this.position.z = 5;
+    // this.rotation.x = Math.PI * -0.5;
 
-    this.position.z = 5;
-    this.rotation.x = Math.PI * -0.5;
+    const rock = _loader.preloader.get("rock");
+
+    const envMap = _loader.preloader.get("env"); // envMap.mapping = EquirectangularReflectionMapping
+
+
+    envMap.mapping = _three.EquirectangularReflectionMapping;
+    let mat = new _three.MeshLambertMaterial({
+      color: 0xffffff
+    });
+    mat.roughness = 0;
+    mat.metalness = 1; // mat.wireframe = true;
+
+    mat.envMap = _loader.preloader.get("env");
+    mat.envMapIntensity = 1;
+    rock.scene.children[0].material = mat;
+    rock.scene.name = "Rock";
+    rock.scene.isCustomObject = true;
+    this.add(rock.scene);
+  }
+
+}
+
+exports.default = Torus;
+
+},{"../loader":23,"three":16}],31:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _three = require("three");
+
+var _loader = require("../loader");
+
+class Torus extends _three.Object3D {
+  constructor() {
+    super(); // this.scale.setScalar(0.0);
+    // this.position.y = -2.5;
+    // this.position.z = 5;
+    // this.rotation.x = Math.PI * -0.5;
 
     const spiral = _loader.preloader.get("spiral");
 
@@ -72700,13 +72750,13 @@ class Torus extends _three.Object3D {
 
 exports.default = Torus;
 
-},{"../loader":23,"three":16}],31:[function(require,module,exports){
+},{"../loader":23,"three":16}],32:[function(require,module,exports){
 (function (global){
 
 global.CANVAS_SKETCH_DEFAULT_STORAGE_KEY = window.location.href;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}]},{},[22,31])
+},{}]},{},[22,32])
 
 //# sourceMappingURL=index.js.map
