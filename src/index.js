@@ -166,9 +166,14 @@ const sketch = ({ context }) => {
                 url: "src/assets/models/random-machine.gltf",
             },
             {
+                id: "spiral",
+                type: "gltf",
+                url: "src/assets/models/rock2.gltf",
+            },
+            {
                 id: "env",
                 type: "texture",
-                url: "src/assets/textures/g20-experimente_texture_3.jpg",
+                url: "src/assets/textures/g20-experimente_texture_4_2.jpg",
             },
         ])
         .then(() => {
@@ -176,8 +181,8 @@ const sketch = ({ context }) => {
 
             // customObjects.push(new Head());
             // customObjects.push(new Crab());
-            // customObjects.push(new Spiral());
-            customObjects.push(new Machine());
+            customObjects.push(new Spiral());
+            // customObjects.push(new Machine());
 
             customObjectsCounter = Math.floor(
                 Math.random() * customObjects.length
