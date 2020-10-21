@@ -12,7 +12,7 @@ export default class Torus extends Object3D {
 
         this.scale.setScalar(2.0);
         // this.position.y = -2.5;
-        // this.position.z = 5;
+        // this.position.z = 1;
         // this.rotation.x = Math.PI * -0.5;
 
         const rock = preloader.get("rock");

@@ -94,6 +94,8 @@ const sketch = ({ context }) => {
         if (event.key === "e") {
             toggleEffect();
         }
+
+        console.log(event.key);
     });
 
     /* Init renderer and canvas */
@@ -163,7 +165,7 @@ const sketch = ({ context }) => {
             {
                 id: "rock",
                 type: "gltf",
-                url: "src/assets/models/rock2.gltf",
+                url: "src/assets/models/wall.gltf",
             },
             {
                 id: "spiral",
