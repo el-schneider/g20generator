@@ -72027,6 +72027,7 @@ let container;
 let customObjects = [];
 let customObjectsCounter = 0;
 let effectActive = true;
+let cameraZRotation = 0;
 
 function toggleBackground() {
   let currentColor = renderer.getClearColor().getHexString();
@@ -72062,6 +72063,29 @@ const sketch = ({
       toggleEffect();
     }
   });
+  window.addEventListener("keydown", event => {
+    if (event.key === "ArrowLeft") {
+      scene.rotation.z += 0.05; // cameraZRotation += 0.05;
+    }
+
+    if (event.key === "ArrowRight") {
+      // cameraZRotation -= 0.05;
+      scene.rotation.z -= 0.05;
+    }
+
+    if (event.key === "ArrowUp") {
+      // cameraZRotation = 0;
+      scene.rotation.z = 0;
+    }
+
+    if (event.key === "ArrowDown") {
+      // cameraZRotation = Math.PI;
+      scene.rotation.z = Math.PI;
+    }
+
+    camera.up.x = Math.sin(cameraZRotation);
+    camera.up.y = Math.cos(cameraZRotation);
+  });
   /* Init renderer and canvas */
 
   container = document.body;
@@ -72096,6 +72120,12 @@ const sketch = ({
   controls.dampingFactor = 0.5;
   controls.start(); // controls.target.set(-5, 0, 0);
 
+  controls.keys = {
+    LEFT: 0,
+    RIGHT: 0,
+    UP: 0,
+    BOTTOM: 0
+  };
   /* Lights */
 
   lights = new _Lights.default();
@@ -72116,7 +72146,7 @@ const sketch = ({
   }, {
     id: "rock",
     type: "gltf",
-    url: "g20generator/src/assets/models/rock2.gltf"
+    url: "g20generator/src/assets/models/wall.gltf"
   }, {
     id: "spiral",
     type: "gltf",
@@ -72647,11 +72677,11 @@ var _three = require("three");
 class BasicLights extends _three.Group {
   constructor(...args) {
     super(...args);
-    const mouseLight1 = new _three.PointLight(0xFFFFFF, 3, 20, .2);
-    const dir = new _three.SpotLight(0xFFFFFF, 0.8, 7, 0.8, 1, 1); // const ambi = new AmbientLight( 0x404040 , .5)
+    const mouseLight1 = new _three.PointLight("white", 3, 20, 0.2);
+    const dir = new _three.SpotLight(0xffffff, 1, 7, 0.8, 1, 1); // const ambi = new AmbientLight(0x404040, 0.5);
+    // const ambi = new AmbientLight(0xff0000, 1);
+    // const hemi = new HemisphereLight(0xffffbb, 0x080820, 1.15);
 
-    const ambi = new _three.AmbientLight(0xFF0000, .5);
-    const hemi = new _three.HemisphereLight(0xffffbb, 0x080820, 1.15);
     dir.position.set(5, 1, 2);
     dir.target.position.set(0, 0, 0);
     mouseLight1.position.set(0, 1, 5);
@@ -72680,7 +72710,7 @@ class Torus extends _three.Object3D {
   constructor() {
     super();
     this.scale.setScalar(2.0); // this.position.y = -2.5;
-    // this.position.z = 5;
+    // this.position.z = 1;
     // this.rotation.x = Math.PI * -0.5;
 
     const rock = _loader.preloader.get("rock");
