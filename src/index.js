@@ -63,6 +63,7 @@ let container;
 let customObjects = [];
 let customObjectsCounter = 0;
 let effectActive = true;
+let cameraZRotation = 0;
 
 function toggleBackground() {
     let currentColor = renderer.getClearColor().getHexString();
@@ -94,8 +95,31 @@ const sketch = ({ context }) => {
         if (event.key === "e") {
             toggleEffect();
         }
+    });
 
-        console.log(event.key);
+    window.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowLeft") {
+            scene.rotation.z += 0.05;
+            // cameraZRotation += 0.05;
+        }
+
+        if (event.key === "ArrowRight") {
+            // cameraZRotation -= 0.05;
+            scene.rotation.z -= 0.05;
+        }
+
+        if (event.key === "ArrowUp") {
+            // cameraZRotation = 0;
+            scene.rotation.z = 0;
+        }
+
+        if (event.key === "ArrowDown") {
+            // cameraZRotation = Math.PI;
+            scene.rotation.z = Math.PI;
+        }
+
+        camera.up.x = Math.sin(cameraZRotation);
+        camera.up.y = Math.cos(cameraZRotation);
     });
 
     /* Init renderer and canvas */
@@ -137,6 +161,7 @@ const sketch = ({ context }) => {
     controls.dampingFactor = 0.5;
     controls.start();
     // controls.target.set(-5, 0, 0);
+    controls.keys = { LEFT: 0, RIGHT: 0, UP: 0, BOTTOM: 0 };
 
     /* Lights */
     lights = new BasicLights();
