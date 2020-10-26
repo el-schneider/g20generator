@@ -69,7 +69,7 @@ function toggleBackground() {
     let currentColor = renderer.getClearColor().getHexString();
 
     if (currentColor === "000000") {
-        renderer.setClearColor("#FFF", 1);
+        renderer.setClearColor("#FFF", 0);
         initPostProcessing(false);
     }
     if (currentColor === "ffffff") {
