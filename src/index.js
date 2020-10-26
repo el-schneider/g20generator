@@ -19,9 +19,9 @@ import {
 } from "postprocessing";
 
 import Spiral from "./objects/Spiral";
-import Crab from "./objects/Crab";
-import Head from "./objects/Head";
 import Rock from "./objects/Rock";
+import Head from "./objects/Head";
+import Wall from "./objects/Wall";
 import OrbitControls from "./controls/OrbitControls";
 import { preloader } from "./loader";
 import { TextureResolver } from "./loader/resolvers/TextureResolver";
@@ -165,7 +165,7 @@ const sketch = ({ context }) => {
 
     /* Lights */
     lights = new BasicLights();
-    let head, crab, spiral;
+    let head, rock, spiral;
 
     initPostProcessing(true);
 
@@ -183,12 +183,12 @@ const sketch = ({ context }) => {
                 url: "src/assets/models/head.gltf",
             },
             {
-                id: "crab",
+                id: "rock",
                 type: "gltf",
-                url: "src/assets/models/mr-crabs.gltf",
+                url: "src/assets/models/rock2.gltf",
             },
             {
-                id: "rock",
+                id: "wall",
                 type: "gltf",
                 url: "src/assets/models/wall.gltf",
             },
@@ -207,7 +207,7 @@ const sketch = ({ context }) => {
             /* Actual content of the scene */
 
             customObjects.push(new Head());
-            // customObjects.push(new Crab());
+            customObjects.push(new Wall());
             customObjects.push(new Spiral());
             customObjects.push(new Rock());
             // customObjects.push(new Machine());
@@ -221,7 +221,7 @@ const sketch = ({ context }) => {
             const newObject = customObjects[customObjectsCounter];
             scene.add(newObject);
             initPostProcessing(
-                newObject.children[0].name === "Crab" ? false : true
+                newObject.children[0].name === "Rock" ? false : true
             );
 
             setSceneRandomRotation();
@@ -267,7 +267,7 @@ function cycleObject() {
 
     const newObject = customObjects[customObjectsCounter];
     scene.add(newObject);
-    initPostProcessing(newObject.children[0].name === "Crab" ? false : true);
+    initPostProcessing(newObject.children[0].name === "Rock" ? false : true);
 }
 
 canvasSketch(sketch, settings);
