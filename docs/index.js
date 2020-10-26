@@ -71969,11 +71969,11 @@ var _postprocessing = require("postprocessing");
 
 var _Spiral = _interopRequireDefault(require("./objects/Spiral"));
 
-var _Crab = _interopRequireDefault(require("./objects/Crab"));
+var _Rock = _interopRequireDefault(require("./objects/Rock"));
 
 var _Head = _interopRequireDefault(require("./objects/Head"));
 
-var _Rock = _interopRequireDefault(require("./objects/Rock"));
+var _Wall = _interopRequireDefault(require("./objects/Wall"));
 
 var _OrbitControls = _interopRequireDefault(require("./controls/OrbitControls"));
 
@@ -72129,7 +72129,7 @@ const sketch = ({
   /* Lights */
 
   lights = new _Lights.default();
-  let head, crab, spiral;
+  let head, rock, spiral;
   initPostProcessing(true);
   /* Preloader */
 
@@ -72140,11 +72140,11 @@ const sketch = ({
     type: "gltf",
     url: "g20generator/src/assets/models/head.gltf"
   }, {
-    id: "crab",
-    type: "gltf",
-    url: "g20generator/src/assets/models/mr-crabs.gltf"
-  }, {
     id: "rock",
+    type: "gltf",
+    url: "g20generator/src/assets/models/rock2.gltf"
+  }, {
+    id: "wall",
     type: "gltf",
     url: "g20generator/src/assets/models/wall.gltf"
   }, {
@@ -72157,8 +72157,8 @@ const sketch = ({
     url: "g20generator/src/assets/textures/g20-experimente_texture_4_2.jpg"
   }]).then(() => {
     /* Actual content of the scene */
-    customObjects.push(new _Head.default()); // customObjects.push(new Crab());
-
+    customObjects.push(new _Head.default());
+    customObjects.push(new _Wall.default());
     customObjects.push(new _Spiral.default());
     customObjects.push(new _Rock.default()); // customObjects.push(new Machine());
 
@@ -72166,7 +72166,7 @@ const sketch = ({
     scene.add(lights);
     const newObject = customObjects[customObjectsCounter];
     scene.add(newObject);
-    initPostProcessing(newObject.children[0].name === "Crab" ? false : true);
+    initPostProcessing(newObject.children[0].name === "Rock" ? false : true);
     setSceneRandomRotation();
   }); // draw each frame
 
@@ -72215,7 +72215,7 @@ function cycleObject() {
   if (customObjectsCounter >= customObjects.length) customObjectsCounter = 0;
   const newObject = customObjects[customObjectsCounter];
   scene.add(newObject);
-  initPostProcessing(newObject.children[0].name === "Crab" ? false : true);
+  initPostProcessing(newObject.children[0].name === "Rock" ? false : true);
 }
 
 canvasSketch(sketch, settings);
@@ -72317,7 +72317,7 @@ function degrees_to_radians(degrees) {
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./controls/OrbitControls":21,"./loader":23,"./loader/resolvers/GLTFResolver":24,"./loader/resolvers/ImageResolver":25,"./loader/resolvers/TextureResolver":26,"./objects/Crab":27,"./objects/Head":28,"./objects/Lights.js":29,"./objects/Rock":30,"./objects/Spiral":31,"canvas-sketch":1,"guigui":6,"lodash":11,"postprocessing":12,"stats.js":15,"three":16,"three/examples/js/controls/OrbitControls":17,"three/examples/js/loaders/GLTFLoader":18}],23:[function(require,module,exports){
+},{"./controls/OrbitControls":21,"./loader":23,"./loader/resolvers/GLTFResolver":24,"./loader/resolvers/ImageResolver":25,"./loader/resolvers/TextureResolver":26,"./objects/Head":27,"./objects/Lights.js":28,"./objects/Rock":29,"./objects/Spiral":30,"./objects/Wall":31,"canvas-sketch":1,"guigui":6,"lodash":11,"postprocessing":12,"stats.js":15,"three":16,"three/examples/js/controls/OrbitControls":17,"three/examples/js/loaders/GLTFLoader":18}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -72587,54 +72587,6 @@ var _loader = require("../loader");
 
 class Torus extends _three.Object3D {
   constructor() {
-    super(); // this.scale.setScalar(0.125);
-
-    this.position.y = -2; // this.rotation.y = -1
-
-    this.rotation.y = Math.PI * -0.5;
-
-    const crab = _loader.preloader.get("crab");
-
-    const envMap = _loader.preloader.get("env"); // envMap.mapping = EquirectangularReflectionMapping
-
-
-    envMap.mapping = _three.EquirectangularReflectionMapping;
-    let mat = new _three.LineDashedMaterial({
-      color: 0xff0000,
-      linewidth: 100 // scale: 0.11,
-      // dashSize: 3,
-      // gapSize: 3,
-
-    }); // mat.roughness = 0;
-    // mat.metalness = 1;
-
-    mat.wireframe = true; // mat.envMap = preloader.get("env");
-    // mat.envMapIntensity = 1;
-
-    crab.scene.children[0].material = mat;
-    crab.scene.name = "Crab";
-    crab.scene.isCustomObject = true;
-    this.add(crab.scene);
-  }
-
-}
-
-exports.default = Torus;
-
-},{"../loader":23,"three":16}],28:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _three = require("three");
-
-var _loader = require("../loader");
-
-class Torus extends _three.Object3D {
-  constructor() {
     super();
     this.scale.setScalar(1.25);
     this.position.y = -2;
@@ -72664,7 +72616,7 @@ class Torus extends _three.Object3D {
 
 exports.default = Torus;
 
-},{"../loader":23,"three":16}],29:[function(require,module,exports){
+},{"../loader":23,"three":16}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -72694,7 +72646,7 @@ class BasicLights extends _three.Group {
 
 exports.default = BasicLights;
 
-},{"three":16}],30:[function(require,module,exports){
+},{"three":16}],29:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -72737,7 +72689,7 @@ class Torus extends _three.Object3D {
 
 exports.default = Torus;
 
-},{"../loader":23,"three":16}],31:[function(require,module,exports){
+},{"../loader":23,"three":16}],30:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -72774,6 +72726,49 @@ class Torus extends _three.Object3D {
     spiral.scene.name = "Spiral";
     spiral.scene.isCustomObject = true;
     this.add(spiral.scene);
+  }
+
+}
+
+exports.default = Torus;
+
+},{"../loader":23,"three":16}],31:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _three = require("three");
+
+var _loader = require("../loader");
+
+class Torus extends _three.Object3D {
+  constructor() {
+    super();
+    this.scale.setScalar(2.0); // this.position.y = -2.5;
+    // this.position.z = 1;
+    // this.rotation.x = Math.PI * -0.5;
+
+    const wall = _loader.preloader.get("wall");
+
+    const envMap = _loader.preloader.get("env"); // envMap.mapping = EquirectangularReflectionMapping
+
+
+    envMap.mapping = _three.EquirectangularReflectionMapping;
+    let mat = new _three.MeshLambertMaterial({
+      color: 0xffffff
+    });
+    mat.roughness = 0;
+    mat.metalness = 1; // mat.wireframe = true;
+
+    mat.envMap = _loader.preloader.get("env");
+    mat.envMapIntensity = 1;
+    wall.scene.children[0].material = mat;
+    wall.scene.name = "Wall";
+    wall.scene.isCustomObject = true;
+    this.add(wall.scene);
   }
 
 }
